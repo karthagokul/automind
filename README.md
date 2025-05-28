@@ -3,8 +3,6 @@
 
 **AutoMind** is an open-source, lightweight automotive diagnostics assistant powered by a small language model (LLM). It runs locally within a vehicle’s infotainment system or on a connected mobile device to interpret Diagnostic Trouble Codes (DTCs), offer intuitive explanations, suggest fixes, and guide drivers in real time — even without internet connectivity.
 
----
-
 ##  Why AutoMind?
 
 Modern vehicles generate hundreds of fault codes — most drivers have no clue what those cryptic `P0171` or `P0420` codes mean. AutoMind bridges that gap by turning those codes into plain language insights, safety advisories, and next steps.
