@@ -1,35 +1,64 @@
 
-# 🚘 AutoMind
+# AutoMind
 
-**AutoMind** is an open-source, lightweight automotive diagnostics assistant powered by a small language model (LLM). It runs locally within a vehicle’s infotainment system or on a connected mobile device to interpret Diagnostic Trouble Codes (DTCs), offer intuitive explanations, suggest fixes, and guide drivers in real time — even without internet connectivity.
+**AutoMind** is an open-source, lightweight automotive diagnostics assistant powered by a small language model (LLM). It runs locally within a vehicle’s infotainment system or a connected mobile device to interpret Diagnostic Trouble Codes (DTCs), offer intuitive explanations, suggest fixes, and guide drivers in real time — even without internet connectivity.
+
 
 ##  Why AutoMind?
 
-Modern vehicles generate hundreds of fault codes — most drivers have no clue what those cryptic `P0171` or `P0420` codes mean. AutoMind bridges that gap by turning those codes into plain language insights, safety advisories, and next steps.
+Modern vehicles generate hundreds of cryptic fault codes like `P0171` or `P0420` that leave drivers guessing. AutoMind bridges that gap by translating these codes into plain, actionable language, safety advisories, and next steps.
 
-**Key Value Propositions:**
--  Translates OBD-II fault codes into human-friendly explanations
-- Provides actionable troubleshooting advice
-- Works offline, integrated into infotainment systems
-- Learns from historical fault trends over time
-- Brand-specific fault code support (customizable per car model)
+### Key Value Propositions:
+
+-   Translates generic and brand-specific fault codes into human-friendly explanations    
+-   Provides actionable troubleshooting advice on the go    
+-   Works offline, integrated directly into the infotainment system    
+-   Learns from historical fault trends to improve recommendations    
+-   Extensible and customizable per car brand
+    
 
 ## Features
 
-- Interprets generic OBD-II and brand-specific fault codes
-- Runs a fine-tuned, compact LLM optimized for automotive context
-- Supports voice and text interactions (planned)
-- Integrates with OBD-II readers via Bluetooth, WiFi, or CAN Bus
-- Works locally, ensuring data privacy and reliability
-- Provides recommended fixes and safety advisories
-- Extensible fault code database for multiple car brands
+-   Interprets generic OBD-II and brand-specific DTCs    
+-   Runs a fine-tuned, compact LLM optimized for automotive diagnostics    
+-   Supports text and voice interactions (planned)    
+-   Integrates with OBD-II readers via Bluetooth, WiFi, or directly over CAN Bus    
+-   Works locally on-device, ensuring data privacy and reliability    
+-   Recommends actionable fixes and safety advisories    
+-   Extensible, community-supported fault code database    
 
 ## How It Works
 
-1. **OBD-II Data Capture:** Reads real-time fault codes via standard OBD-II interface
-2. **LLM Inference Engine:** A fine-tuned lightweight language model interprets the code context
-3. **Response Generation:** Generates an explanation and repair suggestion in plain language
-4. **Driver Interface:** Displays or speaks the result through the car infotainment system
+1.  **OBD-II or CAN Bus Data Capture**: Reads real-time fault codes from vehicle systems
+    
+2.  **LLM Inference Engine**: A lightweight language model interprets the code and its context
+    
+3.  **Response Generation**: Produces clear explanations and repair suggestions
+    
+4.  **Driver Interface**: Displays or speaks the result via the infotainment system
+    
+## CAN Bus Real-time Integration (Planned)
+
+In production, AutoMind will bypass OBD-II polling and read fault codes **directly from the vehicle’s CAN Bus network** via the infotainment system’s internal CAN interface.  
+This enables real-time, seamless fault detection and contextual driver guidance without external adapters.
+
+**Advantages:**
+
+-   Faster and continuous diagnostics
+    
+-   Access to proprietary, non-OBD fault messages
+    
+-   Cleaner integration into infotainment UI/UX
+    
+
+**Example:**  
+On detecting a DTC message over CAN:
+
+-   Parse message ID and payload
+    
+-   Query the onboard LLM
+    
+-   Display diagnosis + recommended actions
 
 ## Getting Started (Development Simulation)
 
