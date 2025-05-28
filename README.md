@@ -1,141 +1,110 @@
 
-# AutoMind
+# Automind: Embedded Proactive Safety Advisor for Vehicles
 
-**AutoMind** is an open-source, lightweight automotive diagnostics assistant powered by a small language model (LLM). It runs locally within a vehicle’s infotainment system or a connected mobile device to interpret Diagnostic Trouble Codes (DTCs), offer intuitive explanations, suggest fixes, and guide drivers in real time — even without internet connectivity.
+**Author:** Gokul Kartha  
+**Affiliation:** Independent Researcher  
+**Email:** kartha.gokul@gmail.com 
+**Link to publication:** https://www.academia.edu/129612892/Automind_A_Fully_Embedded_Proactive_Safety_Advisor_for_Automotive_Systems_Using_Knowledge_Graphs_and_Quantized_LLMs 
+## Overview
+
+**Automind** is an embedded AI-powered safety advisor for vehicles that operates **fully offline** on automotive-grade hardware. It combines the **semantic precision of Knowledge Graphs (KGs)** with the **language fluency of quantized Large Language Models (LLMs)** to deliver **proactive, explainable, and context-aware safety alerts** to drivers.
+
+Unlike traditional ADAS systems which react to events, Automind **anticipates hazards** by reasoning over real-time telemetry, regulations, road conditions, and environment—all without cloud dependency.
+
+## Key Features
+
+- **Embedded & Offline**: Runs on in-vehicle units like Qualcomm SA8155P or NVIDIA DRIVE Orin.
+- **Knowledge Graph Reasoning**: Encodes vehicle rules, environmental effects, and traffic laws.
+- **Quantized LLM (3-bit)**: Generates real-time natural language alerts using TinyLlama.
+- **Context-Aware Safety Alerts**: Advisories based on speed, terrain, weather, component wear, etc.
+- **ASIL-B Certifiable**: Real-time Rust/C engine with <300ms latency.
+- **Updatable Road Knowledge**: Syncs with navigation systems or receives OTA KG patches.
 
 
-##  Why AutoMind?
+## Example Use Case
 
-Modern vehicles generate hundreds of cryptic fault codes like `P0171` or `P0420` that leave drivers guessing. AutoMind bridges that gap by translating these codes into plain, actionable language, safety advisories, and next steps.
+**Scenario:** Curved highway, rain, high brake temperature
 
-### Key Value Propositions:
+**Input:**
+```json
+{
+  "location": "A45_Curve",
+  "speed": "110 km/h",
+  "brake_temp": "295°C",
+  "weather": "Rain",
+  "tire_tread": "2.8mm",
+  "active_rules": ["HWY-RAIN-5", "BRAKE-MAX-285"]
+}
+```
 
--   Translates generic and brand-specific fault codes into human-friendly explanations    
--   Provides actionable troubleshooting advice on the go    
--   Works offline, integrated directly into the infotainment system    
--   Learns from historical fault trends to improve recommendations    
--   Extensible and customizable per car brand
-    
+**Output (LLM):**
+> "Reduce speed to 90 km/h – wet curve ahead and brake temperature approaching critical limit. Tire grip reduced."
 
-## Features
 
--   Interprets generic OBD-II and brand-specific DTCs    
--   Runs a fine-tuned, compact LLM optimized for automotive diagnostics    
--   Supports text and voice interactions (planned)    
--   Integrates with OBD-II readers via Bluetooth, WiFi, or directly over CAN Bus    
--   Works locally on-device, ensuring data privacy and reliability    
--   Recommends actionable fixes and safety advisories    
--   Extensible, community-supported fault code database    
+## System Architecture
 
-## How It Works
+```
+         +-----------------------------+
+         |      Vehicle Telemetry      |
+         +-------------+---------------+
+                       |
+                       v
+     +-------------------------------+
+     |  Knowledge Graph (Binary KG)  |
+     +-------------------------------+
+                       |
+                       v
+       +-----------------------------+
+       |   Rust/C Safety Inference   |
+       +-----------------------------+
+                       |
+                       v
+     +-------------------------------+
+     | Quantized LLM (TinyLlama 3b)  |
+     +-------------------------------+
+                       |
+                       v
+       +-----------------------------+
+       |  Driver Alert (Voice/UI)    |
+       +-----------------------------+
+```
 
-1.  **OBD-II or CAN Bus Data Capture**: Reads real-time fault codes from vehicle systems
-    
-2.  **LLM Inference Engine**: A lightweight language model interprets the code and its context
-    
-3.  **Response Generation**: Produces clear explanations and repair suggestions
-    
-4.  **Driver Interface**: Displays or speaks the result via the infotainment system
-    
-## CAN Bus Real-time Integration (Planned)
+## Hardware Requirements
 
-In production, AutoMind will bypass OBD-II polling and read fault codes **directly from the vehicle’s CAN Bus network** via the infotainment system’s internal CAN interface.  
-This enables real-time, seamless fault detection and contextual driver guidance without external adapters.
+| Tier         | Example SoC         | RAM     | AI Compute | Use Case         |
+|--------------|---------------------|---------|------------|------------------|
+| Minimum      | Qualcomm SA8155P    | 4GB     | 8 TOPS     | Midrange OEM     |
+| Recommended  | NVIDIA DRIVE Orin   | 12GB    | 254 TOPS   | Premium OEM      |
+| Low-Cost     | TI Jacinto 7        | 4GB     | 8 TOPS     | Fleets, Retrofits |
 
-**Advantages:**
-
--   Faster and continuous diagnostics
-    
--   Access to proprietary, non-OBD fault messages
-    
--   Cleaner integration into infotainment UI/UX
-    
-
-**Example:**  
-On detecting a DTC message over CAN:
-
--   Parse message ID and payload
-    
--   Query the onboard LLM
-    
--   Display diagnosis + recommended actions
-
-## Getting Started (Development Simulation)
-
-> **Note:** The full simulation runs locally on your machine using Python and a compact LLM (e.g. `TinyLLaMA`, `Phi-2`, `Gemma-2B`)
-
-### 📋 Prerequisites
-- Python 3.10+
-- `transformers`, `torch`, `obd` (for OBD-II simulation)
-- Access to fault code dataset (JSON format)
-
-### Installation
-
-    git clone https://github.com/yourusername/automind.git
-    cd automind
-    pip install -r requirements.txt
-    python automind_simulator.py
-
-This will simulate fault code inputs and LLM-generated outputs.
-
-##  LLM Fine-Tuning & Dataset
-
-We use a dataset consisting of:
-
--   Generic OBD-II fault codes (P0xxx, P1xxx, etc.)
-    
--   Toyota-specific codes (example set for demo)
-    
--   Human-readable explanations
-    
--   Suggested repair steps
-    
-
-**Example Entry:**
-
-    `{  "code":  "P0171",  "meaning":  "System Too Lean (Bank 1)",  "explanation":  "Indicates an air/fuel mixture imbalance on Bank 1.",  "action":  "Inspect for vacuum leaks, clean MAF sensor, check fuel pressure."  }`
-
-**Fine-tuning instructions and scripts will be provided soon.**
 
 ## Roadmap
 
--   Fault code lookup + explanation module
-    
--   Voice assistant integration (offline)
-    
--   CAN Bus direct interfacing
-    
--   Multi-brand DTC support
-    
--   Historical fault trend analysis
-    
--   Community-contributed code database
-    
+| Phase    | Duration | Highlights                                  |
+|----------|----------|---------------------------------------------|
+| Phase 1  | 4 weeks  | MVP Simulation, KG Engine, LLM Prompting    |
+| Phase 2  | 8 weeks  | Hardware Integration, OBD/CAN parsing       |
+| Phase 3  | 12 weeks | Field Testing, UI Feedback, Certification   |
+
+
+## Licensing & Collaboration
+
+This is a research prototype. For collaboration, licensing, or integration inquiries, please contact the author.
+
+## References
+
+- [NHTSA - Driver Assistance Systems](https://www.nhtsa.gov/equipment/driver-assistance-technologies)
+- [OpenStreetMap - Road Data](https://www.openstreetmap.org/)
+- [TinyLlama - LLM Model](https://huggingface.co/cognitivecomputations/TinyLlama-1.1B-Chat-v1.0)
+- [LLM: Brown et al. (2020) - Few-Shot Learners](https://proceedings.neurips.cc/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf)
 
 ## Contributing
 
-We welcome contributions of all kinds — bug fixes, new features, dataset expansions, or documentation improvements.
+This project is under active development. If you're interested in contributing on:
 
-**To contribute:**
+- Knowledge Graph construction
+- Embedded AI inference
+- ADAS simulator integration
 
-1.  Fork the repo
-    
-2.  Create a feature branch (`git checkout -b feature/my-feature`)
-    
-3.  Commit your changes
-    
-4.  Push to your fork
-    
-5.  Submit a Pull Request
-    
-## License
+Reach out via [kartha.gokul@gmail.com](mailto:kartha.gokul@gmail.com).
 
-MIT License. See `LICENSE` file for details.
-
-## Stay in Touch
-
-Follow the project and contribute via:
-
--   [GitHub Issues](https://github.com/karthagokul/automind/issues)
-    
--   Discussions (coming soon)
